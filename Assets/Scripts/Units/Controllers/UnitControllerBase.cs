@@ -14,6 +14,8 @@ namespace Units.Controllers
 
         protected virtual void Update()
         {
+            if (_gameUnit == null)
+                return;
             ControllUnitLoop();
         }
 
