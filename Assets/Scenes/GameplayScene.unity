@@ -1421,6 +1421,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ec72cd60d2848b4a4fbb4c1cd10822c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _currentState: 1
   _maxHealth: 100
   _maxMana: 0
   _armor: 0

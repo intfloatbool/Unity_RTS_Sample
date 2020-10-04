@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 using Units.Enums;
 using Units.Properties;
 using UnityEngine;
@@ -7,6 +8,10 @@ namespace Units
 {
     public class GameUnit : MonoBehaviour
     {
+        [SerializeField] private UnitState _currentState = UnitState.STANDING;
+        public UnitState CurrentState => _currentState;
+
+        [Space]
         [SerializeField] private int _maxHealth = 100;
         
         public int MaxHealth
@@ -87,5 +92,85 @@ namespace Units
             get => _spellCaster;
             set => _spellCaster = value;
         }
+
+
+        #region UnitEvents
+
+        public event Action<UnitState> OnStateChanged;
+
+        #endregion
+
+        private void SetState(UnitState unitState)
+        {
+            _currentState = unitState;
+            #if UNITY_EDITOR
+                Debug.Log("State changed: " + unitState.ToString());
+            #endif
+            OnStateChanged?.Invoke(_currentState);
+        }
+        public void DoAction(UnitActionType actionType)
+        {
+            switch (_currentState)
+            {
+                case UnitState.STANDING:
+                {
+                    if (actionType == UnitActionType.MOVE_START)
+                    {
+                        SetState(UnitState.MOVING);
+                    }
+                    else if (actionType == UnitActionType.ATTACK_START)
+                    {
+                        SetState(UnitState.ATTACKING);
+                    }
+                    else if (actionType == UnitActionType.SPELL_START)
+                    {
+                        SetState(UnitState.SPELLING);
+                    }
+                    else if (actionType == UnitActionType.DIE)
+                    {
+                        SetState(UnitState.DYING);
+                    }
+                    break;
+                }
+                case UnitState.MOVING:
+                {
+                    if (actionType == UnitActionType.MOVE_STOP)
+                    {
+                        SetState(UnitState.STANDING);
+                    }
+
+                    if (actionType == UnitActionType.DIE)
+                    {
+                        SetState(UnitState.DYING);
+                    }
+                    break;
+                }
+                case UnitState.SPELLING:
+                {
+                    if (actionType == UnitActionType.SPELL_STOP)
+                    {
+                        SetState(UnitState.STANDING);
+                    }
+                    if (actionType == UnitActionType.DIE)
+                    {
+                        SetState(UnitState.DYING);
+                    }
+                    break;
+                }
+                case UnitState.ATTACKING:
+                {
+                    if (actionType == UnitActionType.ATTACK_STOP)
+                    {
+                        SetState(UnitState.STANDING);
+                    }
+                    if (actionType == UnitActionType.DIE)
+                    {
+                        SetState(UnitState.DYING);
+                    }
+                    break;
+                }
+            }
+        }
+        
     }
 }
