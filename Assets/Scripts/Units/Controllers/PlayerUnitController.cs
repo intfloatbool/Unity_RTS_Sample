@@ -1,5 +1,4 @@
-﻿using System;
-using GameInput;
+﻿using GameInput;
 using Units.Enums;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -8,6 +7,10 @@ namespace Units.Controllers
 {
     public class PlayerUnitController : UnitControllerBase
     {
+        [SerializeField] private GameUnit _defaultUnit;
+        private GameUnit _lastUsedUnit;
+        
+        [Space]
         [SerializeField] private InputProviderBase _inputProvider;
         [SerializeField] private float _rotationSpeed = 30f;
         
@@ -17,16 +20,19 @@ namespace Units.Controllers
 
         private bool _isMoving;
         
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
             Assert.IsNotNull(_inputProvider, "_inputProvider != null");
-            Assert.IsNotNull(_gameUnit.Mover, "_gameUnit.Mover != null");
-
             if (_inputProvider != null)
             {
                 _inputProvider.OnButtonPressed += OnButtonPressed;
             }
+
+            if (_defaultUnit != null)
+            {
+                SetUnit(_defaultUnit);
+            }
+            
         }
 
         private void OnDestroy()
@@ -35,6 +41,37 @@ namespace Units.Controllers
             {
                 _inputProvider.OnButtonPressed -= OnButtonPressed;
             }
+        }
+
+        public override void SetUnit(GameUnit gameUnit)
+        {
+            base.SetUnit(gameUnit);
+            if (_gameUnit != null)
+            {
+                if (_lastUsedUnit != null)
+                {
+                    var weapon = _lastUsedUnit.Weapon;
+
+                    if (weapon != null)
+                    {
+                        weapon.OnWeaponUsed -= OnWeaponAttackDone;
+                    }
+                }
+                
+                var currentWeapon = _gameUnit.Weapon;
+
+                if (currentWeapon != null)
+                {
+                    currentWeapon.OnWeaponUsed += OnWeaponAttackDone;
+                }
+
+                _lastUsedUnit = _gameUnit;
+            }
+        }
+
+        private void OnWeaponAttackDone()
+        {
+            _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
         }
 
         protected override void ControllUnitLoop()
@@ -122,7 +159,12 @@ namespace Units.Controllers
         private void OnAttack()
         {
             // TODO: Complete attack stop
-            _gameUnit.DoAction(UnitActionType.ATTACK_START);
+            var weapon = _gameUnit.Weapon;
+            if (weapon != null)
+            {
+                weapon.Attack();
+                _gameUnit.DoAction(UnitActionType.ATTACK_START);
+            }
         }
 
         private void OnSpell()

@@ -6,9 +6,10 @@ namespace Units.Controllers
     public abstract class UnitControllerBase : MonoBehaviour
     {
         [SerializeField] protected GameUnit _gameUnit;
-
-        protected virtual void Awake()
+        
+        public virtual void SetUnit(GameUnit gameUnit)
         {
+            _gameUnit = gameUnit;
             Assert.IsNotNull(_gameUnit, "_gameUnit != null");
         }
 
