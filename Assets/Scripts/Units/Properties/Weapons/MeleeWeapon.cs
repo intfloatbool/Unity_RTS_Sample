@@ -1,9 +1,17 @@
-﻿using UnityEngine;
+﻿using System;
 
 namespace Units.Properties.Weapons
 {
-    public class MeleeWeapon : MonoBehaviour
+    public class MeleeWeapon : Weapon
     {
+        public override event Action OnWeaponUsed;
         
+        protected override void UseWeapon()
+        {
+            
+            _isReady = false;
+            //TODO: Realize attack
+            OnWeaponUsed?.Invoke();
+        }
     }
 }

@@ -85,9 +85,9 @@ namespace Units.Controllers
         private void PlayerInputControlLoop()
         {
             bool isMoved = ControlMovementLoop();
-            bool isRotated = ControlRotationLoop();
+            ControlRotationLoop();
 
-            bool isInputDown = isMoved || isRotated;
+            bool isInputDown = isMoved;
             if (isInputDown)
             {
                 _gameUnit.DoAction(UnitActionType.MOVE_START);
@@ -160,10 +160,10 @@ namespace Units.Controllers
         {
             // TODO: Complete attack stop
             var weapon = _gameUnit.Weapon;
-            if (weapon != null)
+            if (weapon != null && weapon.IsReady)
             {
-                weapon.Attack();
                 _gameUnit.DoAction(UnitActionType.ATTACK_START);
+                weapon.Attack();
             }
         }
 

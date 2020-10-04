@@ -6,21 +6,21 @@ namespace Units.Properties
 {
     public abstract class Weapon : MonoBehaviour
     {
-        [SerializeField] private float _attackDistance = 1f;
+        [SerializeField] protected float _attackDistance = 1f;
         public float AttackDistance
         {
             get => _attackDistance;
             set => _attackDistance = value;
         }
 
-        [SerializeField] private int _minDamage = 5;
+        [SerializeField] protected int _minDamage = 5;
         public int MINDamage
         {
             get => _minDamage;
             set => _minDamage = value;
         }
 
-        [SerializeField] private int _maxDamage = 10;
+        [SerializeField] protected int _maxDamage = 10;
 
         public int MAXDamage
         {
@@ -30,7 +30,7 @@ namespace Units.Properties
 
         public int RandomDamage => Random.Range(_minDamage, _maxDamage);
 
-        [SerializeField] private float _attackDelay = 2f;
+        [SerializeField] protected float _attackDelay = 2f;
 
         public float AttackDelay
         {
@@ -40,7 +40,7 @@ namespace Units.Properties
         
         [Space]
         [Header("Runtime")]
-        [SerializeField] private bool _isReady = true;
+        [SerializeField] protected bool _isReady = true;
         public bool IsReady => _isReady;
 
 
@@ -49,7 +49,7 @@ namespace Units.Properties
         
         private float _attackTimer = 0f;
 
-        private void Update()
+        protected virtual void Update()
         {
             HandleAttackTimer();
         }
