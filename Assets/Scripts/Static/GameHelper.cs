@@ -10,6 +10,12 @@ namespace Game.Static
         public static class Animations
         {
 
+            public const string STAND_STATE_NAME = "STAND";
+            public const string MOVE_STATE_NAME = "MOVE";
+            public const string ATTACK_STATE_NAME = "ATTACK";
+            
+            public const string MOVE_DIR_PARAM = "MOVE_DIR";
+            
             private const string IS_MOVE_KEY = "IS_MOVE";
             private const string IS_ATTACK_KEY = "IS_ATTACK";
 
@@ -38,7 +44,7 @@ namespace Game.Static
                     case UnitState.ATTACKING:
                     {
                         animator.SetBool(_animationsDictHashes[IS_MOVE_KEY], false);
-                        animator.SetBool(_animationsDictHashes[IS_ATTACK_KEY], false);
+                        animator.SetBool(_animationsDictHashes[IS_ATTACK_KEY], true);
                         break;
                     }
                 }

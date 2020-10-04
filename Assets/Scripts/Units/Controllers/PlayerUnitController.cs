@@ -1,4 +1,5 @@
-﻿using GameInput;
+﻿using Game.Static;
+using GameInput;
 using Units.Enums;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -9,7 +10,7 @@ namespace Units.Controllers
     {
         [SerializeField] private GameUnit _defaultUnit;
         private GameUnit _lastUsedUnit;
-        
+
         [Space]
         [SerializeField] private InputProviderBase _inputProvider;
         [SerializeField] private float _rotationSpeed = 30f;
@@ -19,7 +20,11 @@ namespace Units.Controllers
         [SerializeField] private Vector3 _moveDir;
 
         private bool _isMoving;
+
+        private float _moveDirStrength = 1f;
         
+        private Animator _animator;
+
         private void Awake()
         {
             Assert.IsNotNull(_inputProvider, "_inputProvider != null");
@@ -32,7 +37,7 @@ namespace Units.Controllers
             {
                 SetUnit(_defaultUnit);
             }
-            
+
         }
 
         private void OnDestroy()
@@ -65,6 +70,8 @@ namespace Units.Controllers
                     currentWeapon.OnWeaponUsed += OnWeaponAttackDone;
                 }
 
+                _animator = _gameUnit.GetComponentInChildren<Animator>();
+
                 _lastUsedUnit = _gameUnit;
             }
         }
@@ -84,7 +91,16 @@ namespace Units.Controllers
 
         private void PlayerInputControlLoop()
         {
-            bool isMoved = ControlMovementLoop();
+            
+            
+            bool isMoved = false;
+            
+            // Disable moving when attacking
+            if (_gameUnit.CurrentState != UnitState.ATTACKING)
+            {
+                isMoved = ControlMovementLoop();
+            }
+            
             ControlRotationLoop();
 
             bool isInputDown = isMoved;
@@ -112,6 +128,12 @@ namespace Units.Controllers
             offsetVector = offsetVector * mover.MoveSpeed * Time.deltaTime;
             _moveDir = offsetVector;
             mover.MoveToByOffset(offsetVector);
+            _moveDirStrength = y;
+
+            if (_animator != null)
+            {
+                _animator.SetFloat(GameHelper.Animations.MOVE_DIR_PARAM, _moveDirStrength);
+            }
             
             return !Mathf.Approximately(y, 0f);
         }
@@ -130,7 +152,11 @@ namespace Units.Controllers
             {
                 case InputButton.ATTACK:
                 {
-                    OnAttack();
+                    if (_gameUnit.CurrentState != UnitState.MOVING
+                        && _gameUnit.CurrentState != UnitState.SPELLING)
+                    {
+                        OnAttack(); 
+                    }
                     break;
                 }
                 // TODO: Unify spells

@@ -1,4 +1,6 @@
 ﻿using System;
+using JetBrains.Annotations;
+using Units.Properties.Weapons;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -37,6 +39,9 @@ namespace Units.Properties
             get => _attackDelay;
             set => _attackDelay = value;
         }
+
+        [CanBeNull]
+        [SerializeField] protected WeaponDoneControllerBase _weaponDoneController;
         
         [Space]
         [Header("Runtime")]
@@ -44,10 +49,11 @@ namespace Units.Properties
         public bool IsReady => _isReady;
 
 
-        public abstract event Action OnWeaponUsed;
+        public event Action OnWeaponUsed;
         
         
-        private float _attackTimer = 0f;
+        protected float _attackTimer = 0f;
+        
 
         protected virtual void Update()
         {
@@ -60,9 +66,23 @@ namespace Units.Properties
                 return;
             
             UseWeapon();
+
+            if (_weaponDoneController != null)
+            {
+                _weaponDoneController.WaitForAttackDone(WeaponUsed);
+            }
+            else
+            {
+                WeaponUsed();
+            }
         }
 
         protected abstract void UseWeapon();
+
+        protected virtual void WeaponUsed()
+        {
+            OnWeaponUsed?.Invoke();
+        }
 
         private void HandleAttackTimer()
         {
