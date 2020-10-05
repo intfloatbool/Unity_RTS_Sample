@@ -69,7 +69,7 @@ namespace Units.Properties
 
             if (_weaponDoneController != null)
             {
-                _weaponDoneController.WaitForAttackDone(WeaponUsed);
+                _weaponDoneController.WaitForAttackDone(this, WeaponUsed);
             }
             else
             {

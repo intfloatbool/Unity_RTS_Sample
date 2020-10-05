@@ -5,6 +5,6 @@ namespace Units.Properties.Weapons
 {
     public abstract class WeaponDoneControllerBase : MonoBehaviour
     {
-        public abstract void WaitForAttackDone(Action callBack);
+        public abstract void WaitForAttackDone(Weapon weapon, Action callBack);
     }
 }

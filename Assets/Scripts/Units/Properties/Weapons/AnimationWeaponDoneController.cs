@@ -19,7 +19,7 @@ namespace Units.Properties.Weapons
             Assert.IsNotNull(_animator, "_animator != null");
         }
 
-        public override void WaitForAttackDone(Action callBack)
+        public override void WaitForAttackDone(Weapon weapon, Action callBack)
         {
             _currentCallback = callBack;
         }
