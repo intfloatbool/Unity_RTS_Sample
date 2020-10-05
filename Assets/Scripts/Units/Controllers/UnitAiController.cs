@@ -1,5 +1,6 @@
 ﻿using System;
 using Units.Controllers.Enums;
+using Units.Enums;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
@@ -23,13 +24,21 @@ namespace Units.Controllers
         [SerializeField] private float _roamRadius = 3f;
         [SerializeField] private float _roamTime = 3f;
 
-
+        [Space] 
+        [Header("Runtime")]
+        [SerializeField] private GameUnit _unitTarget;
+        [SerializeField] private Vector3 _pointTarget;
+        
         private float _roamTimer;
-
-
+        
         private Vector3 _basicUnitPos;
         
         private NavMeshAgent _unitNavMesh;
+
+
+        private bool _isMoving;
+        private GameUnit _targetUnit;
+
         private void Awake()
         {
             if (_gameUnit != null)
@@ -48,6 +57,16 @@ namespace Units.Controllers
         private void SaveBasicValues()
         {
             _basicUnitPos = transform.position;
+        }
+
+        public void SetTarget(GameUnit target)
+        {
+            _unitTarget = target;
+        }
+
+        public void SetTarget(Vector3 point)
+        {
+            _pointTarget = point;
         }
 
         protected override void ControllUnitLoop()
@@ -85,6 +104,11 @@ namespace Units.Controllers
         private void HandleRoamingLoop()
         {
             RoamTimerLoop();
+            bool isReachPosition = IsReachPosition();
+            if (isReachPosition)
+            {
+                _gameUnit.DoAction(UnitActionType.MOVE_STOP);
+            }
         }
 
         private void RoamTimerLoop()
@@ -113,7 +137,44 @@ namespace Units.Controllers
             NavMeshHit hit;
             NavMesh.SamplePosition(randomDirection, out hit, _roamRadius, 1);
             Vector3 finalPosition = hit.position;
-            _unitNavMesh.destination = finalPosition;
+            
+            MoveToTarget(finalPosition);
+        }
+
+        private void MoveToTarget(Vector3 targetPoint)
+        {
+            _pointTarget = targetPoint;
+            _unitNavMesh.destination = _pointTarget;
+            
+            _gameUnit.DoAction(UnitActionType.MOVE_START);
+        }
+
+        private bool IsReachPosition()
+        {
+            Vector3 offset = _pointTarget - _gameUnit.transform.position;
+            float sqrLen = offset.sqrMagnitude;
+
+            // square the distance we compare with
+            float stoppingDistance = _unitNavMesh.stoppingDistance;
+            if (sqrLen < stoppingDistance * stoppingDistance)
+            {
+                return true;
+            }
+
+            return false;
+        }
+        
+        //DEBUG
+        private void OnDrawGizmos()
+        {
+            if (_gameUnit == null)
+                return;
+            
+            var roamingRadiusColor = Color.cyan;
+
+            Gizmos.color = roamingRadiusColor;
+            var center = _isStaticRoaming ? _basicUnitPos : _gameUnit.transform.position;
+            Gizmos.DrawWireSphere(center, _roamRadius);
         }
     } 
 }
