@@ -23,10 +23,13 @@ namespace Units.Controllers
         [SerializeField] private bool _isStaticRoaming = false;
         [SerializeField] private float _roamRadius = 3f;
         [SerializeField] private float _roamTime = 3f;
+        
+        [Space]
+        [Header("Attacking")]
 
         [Space] 
         [Header("Runtime")]
-        [SerializeField] private GameUnit _unitTarget;
+        [SerializeField] private GameUnit _targetUnit;
         [SerializeField] private Vector3 _pointTarget;
         
         private float _roamTimer;
@@ -37,7 +40,6 @@ namespace Units.Controllers
 
 
         private bool _isMoving;
-        private GameUnit _targetUnit;
 
         private void Awake()
         {
@@ -47,6 +49,27 @@ namespace Units.Controllers
             }
             
             Assert.IsNotNull(_unitNavMesh, "_unitNavMesh != null");
+
+            if (_gameUnit != null && _gameUnit.Weapon != null)
+            {
+                _gameUnit.Weapon.OnWeaponUsed += OnWeaponAttackDone;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_gameUnit != null && _gameUnit.Weapon != null)
+            {
+                _gameUnit.Weapon.OnWeaponUsed -= OnWeaponAttackDone;
+            }
+        }
+
+        private void OnWeaponAttackDone()
+        {
+            _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
+            
+            //test
+            Debug.Log($"{_gameUnit.name} attack done!");
         }
 
         private void Start()
@@ -61,7 +84,7 @@ namespace Units.Controllers
 
         public void SetTarget(GameUnit target)
         {
-            _unitTarget = target;
+            _targetUnit = target;
         }
 
         public void SetTarget(Vector3 point)
@@ -71,6 +94,12 @@ namespace Units.Controllers
 
         protected override void ControllUnitLoop()
         {
+            // leave this method empty for AI controller
+        }
+
+        private void LateUpdate()
+        {
+            // CRITICAL NECCESSARY USE THIS IN LateUpdate() Do not move it in Update in ControllUnitLoop() !
             if (_unitNavMesh == null)
                 return;
             
@@ -91,6 +120,7 @@ namespace Units.Controllers
                     HandleRoamingLoop();
                     break;
                 case AiBehaviorType.ROAMING_AND_ATTACK_ENEMIES:
+                    HandleRoamingAndAttackLoop();
                     break;
                 case AiBehaviorType.STAND:
                     break;
@@ -99,6 +129,51 @@ namespace Units.Controllers
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void HandleRoamingAndAttackLoop()
+        {
+            HandleAttackLoop();
+            if(_gameUnit.CurrentState != UnitState.ATTACKING)
+                HandleRoamingLoop();
+        }
+
+        private void HandleAttackLoop()
+        {
+            var weapon = _gameUnit?.Weapon;
+            if (weapon != null)
+            {
+                bool isReachTarget = IsReachTargetUnit(weapon.AttackDistance);
+                if (isReachTarget)
+                {
+                    // Look at enemy is necessary
+                    _unitNavMesh.transform.LookAt(_targetUnit.transform.position);
+        
+                    if (weapon.IsReady)
+                    {
+                        _gameUnit.DoAction(UnitActionType.ATTACK_START);
+                        weapon.Attack();
+                    }
+                }
+            }
+        }
+
+        private bool IsReachTargetUnit(float distanceToContact)
+        {
+            if (_targetUnit != null)
+            {
+                Vector3 offset = _targetUnit.transform.position -
+                                 _gameUnit.transform.position;
+                float sqrLen = offset.sqrMagnitude;
+                float sqrDistance = distanceToContact * distanceToContact;
+
+                if (sqrLen < sqrDistance)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void HandleRoamingLoop()

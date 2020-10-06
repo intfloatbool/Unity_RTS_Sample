@@ -4240,11 +4240,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameUnit: {fileID: 2016663630}
-  _aiBehaviorType: 3
+  _aiBehaviorType: 4
   _isStaticRoaming: 0
   _roamRadius: 3
   _roamTime: 3
-  _unitTarget: {fileID: 0}
+  _targetUnit: {fileID: 1973647957}
   _pointTarget: {x: 0, y: 0, z: 0}
 --- !u!1 &2086464087
 GameObject:

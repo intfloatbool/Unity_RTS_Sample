@@ -8,7 +8,6 @@ namespace Units.Properties.Weapons
     {
         [SerializeField] private Animator _animator;
         
-        private bool _isWaitForDone = false;
         private Action _currentCallback;
 
         private float _timeToWait;
@@ -36,9 +35,9 @@ namespace Units.Properties.Weapons
             {
                 if (_timer >= _timeToWait)
                 {
-                    _isWaitForDone = false;
                     _currentCallback?.Invoke();
                     _timer = 0f;
+                    _isWaitForDone = false;
                 }
                 _timer += Time.deltaTime;
             }

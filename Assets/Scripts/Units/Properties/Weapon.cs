@@ -64,8 +64,11 @@ namespace Units.Properties
         {
             if(!_isReady)
                 return;
-            
-            UseWeapon();
+
+            if (_weaponDoneController != null && _weaponDoneController.IsWaitForDone)
+            {
+                return;
+            }
 
             if (_weaponDoneController != null)
             {
@@ -75,6 +78,8 @@ namespace Units.Properties
             {
                 WeaponUsed();
             }
+            
+            UseWeapon();
         }
 
         protected abstract void UseWeapon();

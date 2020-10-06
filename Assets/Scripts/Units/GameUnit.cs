@@ -102,9 +102,6 @@ namespace Units
 
         private void SetState(UnitState unitState)
         {
-#if UNITY_EDITOR
-            Debug.Log($"State changed: lastState: {_currentState},current: {unitState}");
-#endif
             _currentState = unitState;
             
             OnStateChanged?.Invoke(_currentState);
