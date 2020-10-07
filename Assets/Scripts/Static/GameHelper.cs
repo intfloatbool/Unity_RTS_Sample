@@ -7,6 +7,12 @@ namespace Game.Static
 {
     public static class GameHelper
     {
+
+        public static class GameTags
+        {
+            public const string GAME_UNIT = "GameUnit";
+        }
+        
         public static class Animations
         {
 

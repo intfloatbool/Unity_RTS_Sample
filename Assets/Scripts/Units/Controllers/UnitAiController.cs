@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Static;
 using Units.Controllers.Enums;
 using Units.Enums;
 using UnityEngine;
@@ -26,7 +27,10 @@ namespace Units.Controllers
         
         [Space]
         [Header("Attacking")]
-
+        [SerializeField] private bool _isAutoDetectTarget;
+        [SerializeField] private float _aggressiveRadius = 2.8f;
+        
+        
         [Space] 
         [Header("Runtime")]
         [SerializeField] private GameUnit _targetUnit;
@@ -38,8 +42,18 @@ namespace Units.Controllers
         
         private NavMeshAgent _unitNavMesh;
 
-
+        
+        private Collider[] _detectUnits = new Collider[10];
+        
+        
         private bool _isMoving;
+
+        private void OnValidate()
+        {
+            if (_gameUnit == null)
+                return;
+            _basicUnitPos = _gameUnit.transform.position;
+        }
 
         private void Awake()
         {
@@ -102,8 +116,46 @@ namespace Units.Controllers
             // CRITICAL NECCESSARY USE THIS IN LateUpdate() Do not move it in Update in ControllUnitLoop() !
             if (_unitNavMesh == null)
                 return;
+
+            if (_isAutoDetectTarget)
+                AutoDetectTargetLoop();
             
-            HandleAiBehaviourLoop();
+            if (_targetUnit != null)
+            {
+                FollowToTargetAndAttack();
+            }
+            else
+            {
+                HandleAiBehaviourLoop();  
+            }
+            
+            
+        }
+
+        private void AutoDetectTargetLoop()
+        {
+            int detected = Physics.OverlapSphereNonAlloc(_gameUnit.transform.position, _aggressiveRadius, _detectUnits);
+            if (detected > 0)
+            {
+                for (int i = 0; i < _detectUnits.Length; i++)
+                {
+                    var detectedUnit = _detectUnits[i];
+                    if(detectedUnit == null)
+                        continue;
+
+                    if (!detectedUnit.transform.CompareTag(GameHelper.GameTags.GAME_UNIT))
+                        return;
+
+                    var gameUnit = detectedUnit.GetComponent<GameUnit>();
+                    if (gameUnit != null)
+                    {
+                        if (gameUnit.Owner != _gameUnit.Owner)
+                        {
+                            _targetUnit = gameUnit;
+                        }
+                    }
+                }
+            }
         }
 
         private void HandleAiBehaviourLoop()
@@ -114,31 +166,17 @@ namespace Units.Controllers
                     break;
                 case AiBehaviorType.MOVE_TO_TARGET:
                     break;
-                case AiBehaviorType.MOVE_TO_TARGET_AND_ATTACK_ENEMIES:
-                    break;
                 case AiBehaviorType.ROAMING:
                     HandleRoamingLoop();
                     break;
-                case AiBehaviorType.ROAMING_AND_ATTACK_ENEMIES:
-                    HandleRoamingAndAttackLoop();
-                    break;
                 case AiBehaviorType.STAND:
-                    break;
-                case AiBehaviorType.STAND_AND_ATTACK_ENEMIES:
-                    break;
+                    break; ;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void HandleRoamingAndAttackLoop()
-        {
-            HandleAttackLoop();
-            if(_gameUnit.CurrentState != UnitState.ATTACKING)
-                HandleRoamingLoop();
-        }
-
-        private void HandleAttackLoop()
+        private void FollowToTargetAndAttack()
         {
             var weapon = _gameUnit?.Weapon;
             if (weapon != null)
@@ -146,17 +184,34 @@ namespace Units.Controllers
                 bool isReachTarget = IsReachTargetUnit(weapon.AttackDistance);
                 if (isReachTarget)
                 {
-                    // Look at enemy is necessary
-                    _unitNavMesh.transform.LookAt(_targetUnit.transform.position);
-        
-                    if (weapon.IsReady)
-                    {
-                        _gameUnit.DoAction(UnitActionType.ATTACK_START);
-                        weapon.Attack();
-                    }
+                    _gameUnit.DoAction(UnitActionType.MOVE_STOP);
+                    AttackTargetLoop();
+                }
+                else
+                {
+                    _unitNavMesh.SetDestination(_targetUnit.transform.position);
+                    _gameUnit.DoAction(UnitActionType.MOVE_START);   
+                }
+                
+            }
+           
+        }
+
+        private void AttackTargetLoop()
+        {
+            // Look at enemy is necessary
+            var weapon = _gameUnit?.Weapon;
+            if (weapon != null)
+            {
+                _unitNavMesh.transform.LookAt(_targetUnit.transform.position);
+                if (weapon.IsReady)
+                {
+                    _gameUnit.DoAction(UnitActionType.ATTACK_START);
+                    weapon.Attack();
                 }
             }
         }
+        
 
         private bool IsReachTargetUnit(float distanceToContact)
         {
@@ -250,6 +305,12 @@ namespace Units.Controllers
             Gizmos.color = roamingRadiusColor;
             var center = _isStaticRoaming ? _basicUnitPos : _gameUnit.transform.position;
             Gizmos.DrawWireSphere(center, _roamRadius);
+
+            if (_isAutoDetectTarget)
+            {
+                Gizmos.color = Color.red;
+                Gizmos.DrawWireSphere(_gameUnit.transform.position, _aggressiveRadius);
+            }
         }
     } 
 }
