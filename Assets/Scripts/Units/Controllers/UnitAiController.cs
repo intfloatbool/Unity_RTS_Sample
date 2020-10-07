@@ -81,9 +81,6 @@ namespace Units.Controllers
         private void OnWeaponAttackDone()
         {
             _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
-            
-            //test
-            Debug.Log($"{_gameUnit.name} attack done!");
         }
 
         private void Start()
@@ -122,7 +119,7 @@ namespace Units.Controllers
             
             if (_targetUnit != null)
             {
-                FollowToTargetAndAttack();
+                FollowToTargetAndAttackLoop();
             }
             else
             {
@@ -134,6 +131,13 @@ namespace Units.Controllers
 
         private void AutoDetectTargetLoop()
         {
+            
+            //clear
+            for (int i = 0; i < _detectUnits.Length; i++)
+            {
+                _detectUnits[i] = null;
+            }
+            
             int detected = Physics.OverlapSphereNonAlloc(_gameUnit.transform.position, _aggressiveRadius, _detectUnits);
             if (detected > 0)
             {
@@ -149,6 +153,9 @@ namespace Units.Controllers
                     var gameUnit = detectedUnit.GetComponent<GameUnit>();
                     if (gameUnit != null)
                     {
+                        if(gameUnit == _gameUnit)
+                            continue;
+                        
                         if (gameUnit.Owner != _gameUnit.Owner)
                         {
                             _targetUnit = gameUnit;
@@ -165,18 +172,40 @@ namespace Units.Controllers
                 case AiBehaviorType.NONE:
                     break;
                 case AiBehaviorType.MOVE_TO_TARGET:
+                    GoToTargetPointLoop();
                     break;
                 case AiBehaviorType.ROAMING:
                     HandleRoamingLoop();
                     break;
                 case AiBehaviorType.STAND:
-                    break; ;
+                    StandLoop();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
-        private void FollowToTargetAndAttack()
+        private void StandLoop()
+        {
+            _gameUnit.DoAction(UnitActionType.MOVE_STOP);
+        }
+
+        private void GoToTargetPointLoop()
+        {
+            
+            bool isReachPosition = IsReachPosition();
+            if (isReachPosition)
+            {
+                _gameUnit.DoAction(UnitActionType.MOVE_STOP);
+            }
+            else
+            {
+                MoveToTarget(_pointTarget);
+            }
+            
+        }
+
+        private void FollowToTargetAndAttackLoop()
         {
             var weapon = _gameUnit?.Weapon;
             if (weapon != null)
