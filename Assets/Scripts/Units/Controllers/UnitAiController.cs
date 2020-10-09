@@ -42,6 +42,7 @@ namespace Units.Controllers
         
         private NavMeshAgent _unitNavMesh;
 
+        private GameObject _lastKilledTarget;
         
         private Collider[] _detectUnits = new Collider[10];
         
@@ -80,6 +81,11 @@ namespace Units.Controllers
 
         private void OnWeaponAttackDone()
         {
+            var weapon = _targetUnit.Weapon;
+            if (weapon != null)
+            {
+                _targetUnit.MakeDamage(weapon.RandomDamage, _gameUnit);
+            }
             _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
         }
 
@@ -114,6 +120,9 @@ namespace Units.Controllers
             if (_unitNavMesh == null)
                 return;
 
+            if (_gameUnit == null || _gameUnit.IsDead)
+                return;
+
             if (_isAutoDetectTarget)
                 AutoDetectTargetLoop();
             
@@ -131,6 +140,16 @@ namespace Units.Controllers
 
         private void AutoDetectTargetLoop()
         {
+            if (_targetUnit != null)
+            {
+                if (_targetUnit.IsDead)
+                {
+                    _lastKilledTarget = _targetUnit.gameObject;
+                    _targetUnit = null;
+                }
+                
+                return;
+            }
             
             //clear
             for (int i = 0; i < _detectUnits.Length; i++)
@@ -148,17 +167,26 @@ namespace Units.Controllers
                         continue;
 
                     if (!detectedUnit.transform.CompareTag(GameHelper.GameTags.GAME_UNIT))
-                        return;
-
+                        continue;
+                    
+                    if(detectedUnit.gameObject.Equals(_lastKilledTarget))
+                        continue;
+                    
                     var gameUnit = detectedUnit.GetComponent<GameUnit>();
                     if (gameUnit != null)
                     {
                         if(gameUnit == _gameUnit)
                             continue;
-                        
+
+                        if (gameUnit.IsDead)
+                        {
+                            continue;
+                        }
+
                         if (gameUnit.Owner != _gameUnit.Owner)
                         {
                             _targetUnit = gameUnit;
+                            _lastKilledTarget = null;
                         }
                     }
                 }
@@ -215,11 +243,13 @@ namespace Units.Controllers
                 {
                     _gameUnit.DoAction(UnitActionType.MOVE_STOP);
                     AttackTargetLoop();
+                    _unitNavMesh.isStopped = true;
                 }
                 else
                 {
                     _unitNavMesh.SetDestination(_targetUnit.transform.position);
                     _gameUnit.DoAction(UnitActionType.MOVE_START);   
+                    _unitNavMesh.isStopped = false;
                 }
                 
             }
@@ -236,7 +266,7 @@ namespace Units.Controllers
                 if (weapon.IsReady)
                 {
                     _gameUnit.DoAction(UnitActionType.ATTACK_START);
-                    weapon.Attack();
+                    weapon.Attack(_gameUnit);
                 }
             }
         }

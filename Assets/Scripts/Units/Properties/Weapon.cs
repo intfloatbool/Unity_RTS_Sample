@@ -60,7 +60,7 @@ namespace Units.Properties
             HandleAttackTimer();
         }
 
-        public virtual void Attack()
+        public virtual void Attack(GameUnit sender)
         {
             if(!_isReady)
                 return;

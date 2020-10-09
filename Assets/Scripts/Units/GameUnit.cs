@@ -11,6 +11,9 @@ namespace Units
         [SerializeField] private UnitState _currentState = UnitState.STANDING;
         public UnitState CurrentState => _currentState;
 
+        [SerializeField] private bool _isDead = false;
+        public bool IsDead => _isDead;
+
         [Space]
         [SerializeField] private int _maxHealth = 100;
         
@@ -93,10 +96,17 @@ namespace Units
             set => _spellCaster = value;
         }
 
+        [Space]
+        [Header("Runtime")]
+        [SerializeField] private int _currentHp = 100;
+
 
         #region UnitEvents
 
         public event Action<UnitState> OnStateChanged;
+        public event Action<int> OnDamaged;
+
+        public event Action OnDead;
 
         #endregion
 
@@ -169,6 +179,21 @@ namespace Units
                 }
             }
         }
-        
+
+
+        public void MakeDamage(int dmg, GameUnit sender)
+        {
+            if (_isDead)
+                return;
+            
+            _currentHp -= dmg;
+            _currentHp = Mathf.Clamp(_currentHp, 0, _maxHealth);
+            OnDamaged?.Invoke(_currentHp);
+            if (_currentHp <= 0)
+            {
+                _isDead = true;
+                OnDead?.Invoke();
+            }
+        }
     }
 }

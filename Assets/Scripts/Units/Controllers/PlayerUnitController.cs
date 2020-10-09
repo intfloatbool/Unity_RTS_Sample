@@ -189,7 +189,7 @@ namespace Units.Controllers
             if (weapon != null && weapon.IsReady)
             {
                 _gameUnit.DoAction(UnitActionType.ATTACK_START);
-                weapon.Attack();
+                weapon.Attack(_gameUnit);
             }
         }
 
