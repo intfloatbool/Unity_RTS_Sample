@@ -1,6 +1,8 @@
 ﻿using Game.Static;
 using GameInput;
 using Units.Enums;
+using Units.Properties;
+using Units.Properties.Weapons;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -14,6 +16,7 @@ namespace Units.Controllers
         [Space]
         [SerializeField] private InputProviderBase _inputProvider;
         [SerializeField] private float _rotationSpeed = 30f;
+        [SerializeField] private float _meleeAttackSphereCastRadius = 0.3f;
         
         [Space]
         [Header("Runtime")]
@@ -79,11 +82,6 @@ namespace Units.Controllers
         private void OnWeaponAttackDone()
         {
             _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
-        }
-
-        private void FindTargetAndAttack()
-        {
-            
         }
 
         protected override void ControllUnitLoop()
@@ -153,6 +151,11 @@ namespace Units.Controllers
 
         private void OnButtonPressed(InputButton inputButton)
         {
+            if(_gameUnit == null)
+                return;
+            if (_gameUnit.IsDead)
+                return;
+            
             switch (inputButton)
             {
                 case InputButton.ATTACK:
@@ -194,6 +197,36 @@ namespace Units.Controllers
             if (weapon != null && weapon.IsReady)
             {
                 _gameUnit.DoAction(UnitActionType.ATTACK_START);
+                HandleAttackByWeaponType(weapon);
+            }
+        }
+
+        private void HandleAttackByWeaponType(Weapon weapon)
+        {
+            if (weapon != null)
+            {
+                if (weapon is MeleeWeapon)
+                {
+                    GameUnit target = null;
+                    RaycastHit hit;
+                    var ray = new Ray(weapon.transform.position, _gameUnit.transform.forward);
+                    Debug.DrawRay(ray.origin, ray.direction, Color.red, 2f);
+                    
+                    if (Physics.SphereCast(ray, _meleeAttackSphereCastRadius, out hit, weapon.AttackDistance))
+                    {
+                        if (hit.collider.CompareTag(GameHelper.GameTags.GAME_UNIT))
+                        {
+                            var unit = hit.collider.GetComponent<GameUnit>();
+                            if (unit != null && unit.Owner != _gameUnit.Owner)
+                            { 
+                                target = unit;
+                            }
+                        }
+
+                        weapon.Target = target;
+                    }
+                }
+                
                 weapon.Attack(_gameUnit);
             }
         }

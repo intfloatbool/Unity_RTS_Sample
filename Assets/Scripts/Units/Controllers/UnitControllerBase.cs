@@ -17,6 +17,10 @@ namespace Units.Controllers
         {
             if (_gameUnit == null)
                 return;
+
+            if (_gameUnit.IsDead)
+                return;
+            
             ControllUnitLoop();
         }
 
