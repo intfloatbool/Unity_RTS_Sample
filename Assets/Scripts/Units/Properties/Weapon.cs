@@ -48,12 +48,14 @@ namespace Units.Properties
         [SerializeField] protected bool _isReady = true;
         public bool IsReady => _isReady;
 
-
+        public GameUnit Target { get; set; }
+        public GameUnit Owner { get; set; }
+        
         public event Action OnWeaponUsed;
         
         
         protected float _attackTimer = 0f;
-        
+
 
         protected virtual void Update()
         {

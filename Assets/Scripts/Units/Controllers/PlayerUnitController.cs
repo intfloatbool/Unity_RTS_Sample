@@ -81,6 +81,11 @@ namespace Units.Controllers
             _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
         }
 
+        private void FindTargetAndAttack()
+        {
+            
+        }
+
         protected override void ControllUnitLoop()
         {
             if (_inputProvider == null)

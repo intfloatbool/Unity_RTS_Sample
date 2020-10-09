@@ -110,6 +110,14 @@ namespace Units
 
         #endregion
 
+        private void Start()
+        {
+            if (_weapon != null)
+            {
+                _weapon.Owner = this;
+            }
+        }
+
         private void SetState(UnitState unitState)
         {
             _currentState = unitState;

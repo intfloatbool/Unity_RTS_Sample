@@ -6,5 +6,18 @@
         {
             _isReady = false;
         }
+
+        protected override void WeaponUsed()
+        {
+            if (Owner != null)
+            {
+                if (Target != null)
+                {
+                    Target.MakeDamage(RandomDamage, Owner);
+                }  
+            }
+            
+            base.WeaponUsed();
+        }
     }
 }

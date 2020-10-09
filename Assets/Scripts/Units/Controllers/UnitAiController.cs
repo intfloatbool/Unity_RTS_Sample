@@ -81,11 +81,6 @@ namespace Units.Controllers
 
         private void OnWeaponAttackDone()
         {
-            var weapon = _targetUnit.Weapon;
-            if (weapon != null)
-            {
-                _targetUnit.MakeDamage(weapon.RandomDamage, _gameUnit);
-            }
             _gameUnit.DoAction(UnitActionType.ATTACK_STOP);
         }
 
@@ -140,12 +135,19 @@ namespace Units.Controllers
 
         private void AutoDetectTargetLoop()
         {
+            var weapon = _gameUnit.Weapon;
+            
             if (_targetUnit != null)
             {
                 if (_targetUnit.IsDead)
                 {
                     _lastKilledTarget = _targetUnit.gameObject;
                     _targetUnit = null;
+                }
+
+                if (weapon != null)
+                {
+                    weapon.Target = _targetUnit;
                 }
                 
                 return;
@@ -336,6 +338,7 @@ namespace Units.Controllers
             _unitNavMesh.destination = _pointTarget;
             
             _gameUnit.DoAction(UnitActionType.MOVE_START);
+            _unitNavMesh.isStopped = false;
         }
 
         private bool IsReachPosition()
