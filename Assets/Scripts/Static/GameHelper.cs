@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Game.Services;
 using Units.Enums;
 using UnityEngine;
 
@@ -7,6 +7,7 @@ namespace Game.Static
 {
     public static class GameHelper
     {
+        public static GameServices Services => GameServices.Instance;
 
         public static class GameTags
         {
