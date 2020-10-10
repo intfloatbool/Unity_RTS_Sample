@@ -373,6 +373,11 @@ namespace Units.Controllers
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(_gameUnit.transform.position, _aggressiveRadius);
             }
+
+            var wayColor = Color.blue;
+            wayColor.a = 0.3f;
+            Gizmos.color = wayColor;
+            Gizmos.DrawCube(_pointTarget, Vector3.one * 0.5f);
         }
     } 
 }
