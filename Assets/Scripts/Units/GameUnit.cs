@@ -2,6 +2,7 @@
 using JetBrains.Annotations;
 using Units.Enums;
 using Units.Properties;
+using Units.Properties.Enums;
 using UnityEngine;
 
 namespace Units
@@ -31,6 +32,9 @@ namespace Units
             set => _maxMana = value;
         }
 
+        [SerializeField] private ArmorType _armorType;
+        public ArmorType ArmorType => _armorType;
+        
         [SerializeField] private int _armor = 0;
 
         public int Armor

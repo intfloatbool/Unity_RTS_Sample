@@ -929,6 +929,7 @@ MonoBehaviour:
   _isDead: 0
   _maxHealth: 100
   _maxMana: 0
+  _armorType: 0
   _armor: 0
   _hpRegeneration: 0.5
   _manaRegeneration: 0.5
@@ -981,6 +982,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _joystick: {fileID: 63789024}
+--- !u!1001 &1631850083
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6507820831008884357, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_Name
+      value: TestUnitAI (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884358, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: _owner
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.4399996
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6507820831008884376, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d478777388a721c4d9cb8cfb697fc810, type: 3}
 --- !u!1 &1689687931
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,10 +11,7 @@
         {
             if (Owner != null)
             {
-                if (Target != null)
-                {
-                    Target.MakeDamage(RandomDamage, Owner);
-                }  
+                DamageToTargetNormalized();
             }
             
             base.WeaponUsed();

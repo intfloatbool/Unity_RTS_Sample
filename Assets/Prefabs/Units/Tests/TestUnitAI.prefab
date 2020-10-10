@@ -637,10 +637,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e5d3c2f313343da96bf87109f922a74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackType: 1
   _attackDistance: 1
-  _minDamage: 5
-  _maxDamage: 10
-  _attackDelay: 1
+  _minDamage: 10
+  _maxDamage: 14
+  _attackDelay: 2
   _weaponDoneController: {fileID: 6507820830681829046}
   _isReady: 1
 --- !u!1 &6507820830342789819
@@ -1094,16 +1095,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentState: 1
   _isDead: 0
-  _maxHealth: 100
+  _maxHealth: 300
   _maxMana: 0
-  _armor: 0
+  _armorType: 4
+  _armor: 2
   _hpRegeneration: 0.5
   _manaRegeneration: 0.5
   _owner: 1
   _weapon: {fileID: 6507820830323083443}
   _mover: {fileID: 6507820831547455269}
   _spellCaster: {fileID: 0}
-  _currentHp: 100
+  _currentHp: 300
 --- !u!114 &6507820831008884377
 MonoBehaviour:
   m_ObjectHideFlags: 0

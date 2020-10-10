@@ -10,5 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a337e570fdf409c8181a07cce4ca49e, type: 3}
-  m_Name: ArmorSettings
+  m_Name: MAGIC_ATTACK
   m_EditorClassIdentifier: 
+  _damageDataForArmors:
+  - _affectedArmorType: 1
+    _attackMultipler: 1
+  - _affectedArmorType: 2
+    _attackMultipler: 1
+  - _affectedArmorType: 3
+    _attackMultipler: 1
+  - _affectedArmorType: 4
+    _attackMultipler: 1
+  - _affectedArmorType: 5
+    _attackMultipler: 1

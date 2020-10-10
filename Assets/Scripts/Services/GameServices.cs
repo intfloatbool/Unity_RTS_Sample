@@ -17,10 +17,11 @@ namespace Game.Services
 
         private Dictionary<string, IGameService> _servicesDict = new Dictionary<string, IGameService>(20);
 
+        public event Action OnServiceLoadingDone;
 
         public T GetService<T>() where T : IGameService
         {
-            string key = nameof(T);
+            string key = typeof(T).Name;
             if (!_servicesDict.ContainsKey(key))
             {
                 Debug.LogError($"{key} not found in services!");
@@ -30,9 +31,17 @@ namespace Game.Services
             return (T) _servicesDict[key];
         }
 
-        private void RegisterService<T>(T service) where T : IGameService
+        private void RegisterService<T>(T service, Type concreteType = null) where T : IGameService
         {
-            string key = nameof(T);
+            string key = null;
+            if (concreteType != null)
+            {
+                key = concreteType.Name;
+            }
+            else
+            {
+                key = typeof(T).Name;
+            }
             if (_servicesDict.ContainsKey(key))
             {
                 Debug.LogError($"{key} already registred!");
@@ -56,15 +65,20 @@ namespace Game.Services
             }
             
             DontDestroyOnLoad(this.gameObject);
-
-            InitialRegister();
         }
 
+        private void Start()
+        {
+            InitialRegister();
+        }
+        
         private void InitialRegister()
         {
             InitialRawServices();
             InitialMonoBehServices();
             InitialScriptableObjectsServices();
+            
+            OnServiceLoadingDone?.Invoke();
         }
 
         private void InitialRawServices()
@@ -80,7 +94,8 @@ namespace Game.Services
                 if (prefab != null)
                 {
                     var instance = Instantiate(prefab, transform);
-                    RegisterService(instance);
+                    
+                    RegisterService(instance, instance.GetType());
                 }
             }
         }

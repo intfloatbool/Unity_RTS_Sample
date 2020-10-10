@@ -7,6 +7,10 @@ namespace Game.Static
 {
     public static class GameHelper
     {
+        //TODO: Make it false to remove all test calls.
+        public const bool IS_TESTING = true;
+        
+        
         public static GameServices Services => GameServices.Instance;
 
         public static class GameTags

@@ -1,5 +1,8 @@
 ﻿using System;
+using Game.Services.SingletonServices;
+using Game.Static;
 using JetBrains.Annotations;
+using Units.Properties.Enums;
 using Units.Properties.Weapons;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -8,6 +11,9 @@ namespace Units.Properties
 {
     public abstract class Weapon : MonoBehaviour
     {
+        [SerializeField] protected AttackType _attackType;
+        public AttackType AttackType => _attackType;
+        
         [SerializeField] protected float _attackDistance = 1f;
         public float AttackDistance
         {
@@ -56,17 +62,42 @@ namespace Units.Properties
         
         protected float _attackTimer = 0f;
 
+        protected AttackHandler _attackHandler;
+
+        private void Awake()
+        {
+            if (GameHelper.Services != null)
+            {
+                _attackHandler = GameHelper.Services.GetService<AttackHandler>();
+                if (_attackHandler == null)
+                {
+                    Debug.LogError("Attack handler is missing!!");
+                }
+            }
+        }
+
+        protected void DamageToTargetNormalized()
+        {
+            if (Target == null)
+                return;
+            var randomDamage = RandomDamage;
+            if (_attackHandler != null)
+            {
+                randomDamage = _attackHandler.NormalizeDamage(randomDamage, this, Target);
+            }
+            Target.MakeDamage(randomDamage, Owner);
+        }
+
 
         protected virtual void Update()
         {
-            HandleAttackTimer();
+            if(_weaponDoneController == null)
+                HandleAttackTimer();
         }
 
         public virtual void Attack(GameUnit sender)
         {
-            if(!_isReady)
-                return;
-
+            
             if (_weaponDoneController != null && _weaponDoneController.IsWaitForDone)
             {
                 return;
@@ -78,6 +109,9 @@ namespace Units.Properties
             }
             else
             {
+                if(!_isReady)
+                    return;
+                
                 WeaponUsed();
             }
             
@@ -88,6 +122,10 @@ namespace Units.Properties
 
         protected virtual void WeaponUsed()
         {
+            if (_weaponDoneController != null)
+            {
+                _isReady = true;
+            }
             OnWeaponUsed?.Invoke();
         }
 

@@ -5,6 +5,6 @@ namespace Game.Services.Base
 {
     public abstract class GameServiceMonoBehaviour : MonoBehaviour, IGameService
     {
-        
+
     }
 }
