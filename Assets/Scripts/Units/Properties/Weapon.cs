@@ -74,6 +74,10 @@ namespace Units.Properties
                     Debug.LogError("Attack handler is missing!!");
                 }
             }
+            else
+            {
+                Debug.LogError("Services is missing!");
+            }
         }
 
         protected void DamageToTargetNormalized()
