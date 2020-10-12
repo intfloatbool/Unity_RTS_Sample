@@ -641,7 +641,7 @@ MonoBehaviour:
   _attackDistance: 1
   _minDamage: 10
   _maxDamage: 14
-  _attackSpeed: 5
+  _attackSpeed: 2
   _weaponDoneController: {fileID: 6507820830681829046}
   _isReady: 1
 --- !u!1 &6507820830342789819
