@@ -1960,56 +1960,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gameUnit: {fileID: 6507820831008884358}
   _unitAnimator: {fileID: 1313578110771457995}
---- !u!1 &6507820830323083442
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6507820830323083444}
-  - component: {fileID: 6507820830323083443}
-  m_Layer: 0
-  m_Name: TestMeleeWeapon
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6507820830323083444
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6507820830323083442}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6507820830582893187}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6507820830323083443
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6507820830323083442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e5d3c2f313343da96bf87109f922a74, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _attackType: 1
-  _attackDistance: 1
-  _minDamage: 10
-  _maxDamage: 14
-  _attackSpeed: 2
-  _weaponDoneController: {fileID: 8074344175644274257}
-  _isReady: 1
 --- !u!1 &6507820830582893186
 GameObject:
   m_ObjectHideFlags: 0
@@ -2037,7 +1987,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 6507820830323083444}
+  - {fileID: 12940357372936857}
   m_Father: {fileID: 6507820831008884376}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2146,17 +2096,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentState: 1
   _isDead: 0
-  _maxHealth: 300
+  _maxHealth: 200
   _maxMana: 0
-  _armorType: 4
-  _armor: 2
+  _armorType: 2
+  _armor: 1
   _hpRegeneration: 0.5
   _manaRegeneration: 0.5
-  _owner: 1
-  _weapon: {fileID: 6507820830323083443}
+  _owner: 3
+  _weapon: {fileID: 4272208559349336268}
   _mover: {fileID: 6507820831547455269}
   _spellCaster: {fileID: 0}
-  _currentHp: 300
+  _currentHp: 200
 --- !u!114 &6507820831008884377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2175,7 +2125,7 @@ MonoBehaviour:
   _roamRadius: 3
   _roamTime: 3
   _isAutoDetectTarget: 1
-  _aggressiveRadius: 2.8
+  _aggressiveRadius: 6.01
   _targetUnit: {fileID: 0}
   _pointTarget: {x: 0, y: 0, z: 0}
 --- !u!65 &6507820831008884378
@@ -2251,3 +2201,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _navMeshAgent: {fileID: 6507820831008884359}
   _moveSpeed: 5
+--- !u!1 &6617333494990001630
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 12940357372936857}
+  - component: {fileID: 4272208559349336268}
+  m_Layer: 0
+  m_Name: TestDistanceWeapon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &12940357372936857
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6617333494990001630}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.689, z: 0.291}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6507820830582893187}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4272208559349336268
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6617333494990001630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23cb6ba9bc7582549b19c0874485c7ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackType: 2
+  _attackDistance: 6
+  _minDamage: 3
+  _maxDamage: 8
+  _attackSpeed: 0.8
+  _weaponDoneController: {fileID: 8074344175644274257}
+  _attackDistanceGizmoColor: {r: 1, g: 0, b: 1, a: 1}
+  _isReady: 1
+  _ammoPrefab: {fileID: 1976621643207088364, guid: 44a087be300718343bd55fd7b04d2e0f, type: 3}
+  _launchPos: {fileID: 12940357372936857}
+  _launchType: 1

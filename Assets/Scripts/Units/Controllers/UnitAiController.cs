@@ -361,12 +361,6 @@ namespace Units.Controllers
         {
             if (_gameUnit == null)
                 return;
-            
-            var roamingRadiusColor = Color.cyan;
-
-            Gizmos.color = roamingRadiusColor;
-            var center = _isStaticRoaming ? _basicUnitPos : _gameUnit.transform.position;
-            Gizmos.DrawWireSphere(center, _roamRadius);
 
             if (_isAutoDetectTarget)
             {

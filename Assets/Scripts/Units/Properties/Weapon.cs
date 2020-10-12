@@ -48,6 +48,9 @@ namespace Units.Properties
 
         [CanBeNull]
         [SerializeField] protected WeaponDoneControllerBase _weaponDoneController;
+
+        [Space] 
+        [SerializeField] private Color _attackDistanceGizmoColor = Color.magenta;
         
         [Space]
         [Header("Runtime")]
@@ -64,7 +67,7 @@ namespace Units.Properties
 
         protected AttackHandler _attackHandler;
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (GameHelper.Services != null)
             {
@@ -90,6 +93,16 @@ namespace Units.Properties
                 randomDamage = _attackHandler.NormalizeDamage(randomDamage, this, Target);
             }
             Target.MakeDamage(randomDamage, Owner);
+        }
+        
+        protected void DamageToCustomTargetNormalized(GameUnit target)
+        {
+            var randomDamage = RandomDamage;
+            if (_attackHandler != null)
+            {
+                randomDamage = _attackHandler.NormalizeDamage(randomDamage, this, target);
+            }
+            target.MakeDamage(randomDamage, Owner);
         }
 
 
@@ -147,6 +160,12 @@ namespace Units.Properties
                 }
                 _attackTimer += Time.deltaTime;
             }
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = _attackDistanceGizmoColor;
+            Gizmos.DrawWireSphere(transform.position, _attackDistance);
         }
     }
 }
