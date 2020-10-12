@@ -20,7 +20,7 @@ namespace Game.Static
         
         public static class Animations
         {
-
+            public const string ATTACK_SPEED_PARAM = "ATTACK_SPEED"; 
             public const string STAND_STATE_NAME = "STAND";
             public const string MOVE_STATE_NAME = "MOVE";
             public const string ATTACK_STATE_NAME = "ATTACK";

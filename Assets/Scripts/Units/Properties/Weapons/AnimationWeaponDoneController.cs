@@ -1,4 +1,5 @@
 ﻿using System;
+using Game.Static;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -21,6 +22,11 @@ namespace Units.Properties.Weapons
         public override void WaitForAttackDone(Weapon weapon, Action callBack)
         {
             _currentCallback = callBack;
+
+            if (_animator != null)
+            {
+                _animator.SetFloat(GameHelper.Animations.ATTACK_SPEED_PARAM, weapon.AttackSpeed);
+            }
         }
 
         public void StartWaiting(float length)

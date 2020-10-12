@@ -204,6 +204,7 @@ namespace Units
             if (_currentHp <= 0)
             {
                 _isDead = true;
+                SetState(UnitState.DYING);
                 OnDead?.Invoke();
             }
         }

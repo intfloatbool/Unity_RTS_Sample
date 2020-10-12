@@ -38,12 +38,12 @@ namespace Units.Properties
 
         public int RandomDamage => Random.Range(_minDamage, _maxDamage);
 
-        [SerializeField] protected float _attackDelay = 2f;
+        [SerializeField] protected float _attackSpeed = 2f;
 
-        public float AttackDelay
+        public float AttackSpeed
         {
-            get => _attackDelay;
-            set => _attackDelay = value;
+            get => _attackSpeed;
+            set => _attackSpeed = value;
         }
 
         [CanBeNull]
@@ -141,7 +141,7 @@ namespace Units.Properties
             }
             else
             {
-                if (_attackTimer >= _attackDelay)
+                if (_attackTimer >= _attackSpeed)
                 {
                     _isReady = true;
                 }
