@@ -62,8 +62,6 @@ namespace Units.Controllers
             {
                 _unitNavMesh = _gameUnit.GetComponent<NavMeshAgent>();
             }
-            
-            Assert.IsNotNull(_unitNavMesh, "_unitNavMesh != null");
 
             if (_gameUnit != null && _gameUnit.Weapon != null)
             {
@@ -111,9 +109,7 @@ namespace Units.Controllers
 
         private void LateUpdate()
         {
-            // CRITICAL NECCESSARY USE THIS IN LateUpdate() Do not move it in Update in ControllUnitLoop() !
-            if (_unitNavMesh == null)
-                return;
+            // CRITICAL NECCESSARY USE THIS IN LateUpdate() Do not move it in Update in ControllUnitLoop() 
 
             if (_gameUnit == null || _gameUnit.IsDead)
                 return;
@@ -222,6 +218,8 @@ namespace Units.Controllers
 
         private void GoToTargetPointLoop()
         {
+            if (_unitNavMesh == null)
+                return;
             
             bool isReachPosition = IsReachPosition();
             if (isReachPosition)
@@ -245,13 +243,17 @@ namespace Units.Controllers
                 {
                     _gameUnit.DoAction(UnitActionType.MOVE_STOP);
                     AttackTargetLoop();
-                    _unitNavMesh.isStopped = true;
+                    if(_unitNavMesh != null)
+                        _unitNavMesh.isStopped = true;
                 }
                 else
                 {
-                    _unitNavMesh.SetDestination(_targetUnit.transform.position);
-                    _gameUnit.DoAction(UnitActionType.MOVE_START);   
-                    _unitNavMesh.isStopped = false;
+                    _gameUnit.DoAction(UnitActionType.MOVE_START);
+                    if (_unitNavMesh != null)
+                    {
+                        _unitNavMesh.SetDestination(_targetUnit.transform.position);
+                        _unitNavMesh.isStopped = false;
+                    }
                 }
                 
             }
@@ -264,7 +266,9 @@ namespace Units.Controllers
             var weapon = _gameUnit?.Weapon;
             if (weapon != null)
             {
-                _unitNavMesh.transform.LookAt(_targetUnit.transform.position);
+                if(_unitNavMesh != null)
+                    _unitNavMesh.transform.LookAt(_targetUnit.transform.position);
+                
                 if (weapon.IsReady)
                 {
                     _gameUnit.DoAction(UnitActionType.ATTACK_START);
@@ -294,6 +298,8 @@ namespace Units.Controllers
 
         private void HandleRoamingLoop()
         {
+            if (_unitNavMesh == null)
+                return;
             RoamTimerLoop();
             bool isReachPosition = IsReachPosition();
             if (isReachPosition)

@@ -62,8 +62,9 @@ namespace Units.Properties
         
         public event Action OnWeaponUsed;
         
-        
-        protected float _attackTimer = 0f;
+        [Space]
+        [Header("Runtime")]
+        [SerializeField] protected float _attackTimer = 0f;
 
         protected AttackHandler _attackHandler;
 
@@ -114,6 +115,13 @@ namespace Units.Properties
 
         public virtual void Attack(GameUnit sender)
         {
+            if (!_isReady)
+                return;
+
+            if (sender.name.Equals("TestTower_0"))
+            {
+                Debug.Log($"Tower attempt to attack!");
+            }
             
             if (_weaponDoneController != null && _weaponDoneController.IsWaitForDone)
             {
@@ -126,12 +134,9 @@ namespace Units.Properties
             }
             else
             {
-                if(!_isReady)
-                    return;
-                
                 WeaponUsed();
             }
-            
+
             UseWeapon();
         }
 
@@ -143,6 +148,8 @@ namespace Units.Properties
             {
                 _isReady = true;
             }
+
+            _attackTimer = 0;
             OnWeaponUsed?.Invoke();
         }
 
