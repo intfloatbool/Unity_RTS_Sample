@@ -28,6 +28,12 @@ namespace Units.Controllers
         [Space]
         [Header("Attacking")]
         [SerializeField] private bool _isAutoDetectTarget;
+        public bool IsAutoDetectTarget
+        {
+            get { return _isAutoDetectTarget; }
+            set { this._isAutoDetectTarget = value; }
+        }
+        
         [SerializeField] private float _aggressiveRadius = 2.8f;
         
         
