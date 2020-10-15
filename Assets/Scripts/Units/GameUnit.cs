@@ -103,8 +103,11 @@ namespace Units
         [Space]
         [Header("Runtime")]
         [SerializeField] private int _currentHp = 100;
+        
 
-
+        public float NormalizedHealth => (float) _currentHp / (float) _maxHealth;
+        
+        
         #region UnitEvents
 
         public event Action<UnitState> OnStateChanged;
