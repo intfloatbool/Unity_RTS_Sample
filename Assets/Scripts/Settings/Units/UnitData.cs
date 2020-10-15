@@ -23,5 +23,24 @@ namespace Game.Settings.Units
 
         [SerializeField] private float _agressiveRadius = 3;
         public float AggressiveRadius => _agressiveRadius;
+
+        [Space] 
+        [Header("Weapon")]
+        [SerializeField] private AttackType _attackType;
+        public AttackType AttackType => _attackType;
+
+        [SerializeField] private float _attackDistance = 1f;
+        public float AttackDistance => _attackDistance;
+
+        [SerializeField] private int _minDamage = 5;
+        public int MinDamage => _minDamage;
+
+        [SerializeField] private int _maxDamage = 10;
+        public int MaxDamage => _maxDamage;
+
+        [SerializeField] private float _attackSpeed = 2f;
+        public float AttackSpeed => _attackSpeed;
+        
+        
     }
 }
