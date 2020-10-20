@@ -21,6 +21,14 @@ namespace MyNamespace
             }
         }
 
+        private void OnValidate()
+        {
+            if (_gameUnit == null)
+            {
+                _gameUnit = GetComponentInParent<GameUnit>();
+            }
+        }
+
         public void SetUnit(GameUnit gameUnit)
         {
             _gameUnit = gameUnit;

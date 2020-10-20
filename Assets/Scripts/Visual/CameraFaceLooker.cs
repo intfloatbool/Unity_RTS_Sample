@@ -6,9 +6,13 @@ namespace Game
     public class CameraFaceLooker : MonoBehaviour
     {
         [SerializeField] private Camera _camera;
-        
+        [SerializeField] private bool _isAutoDetectCamera = true;
         private void Awake()
         {
+            if (_isAutoDetectCamera == true)
+            {
+                _camera = FindObjectOfType<Camera>();
+            }
             if (_camera == null)
             {
                 _camera = Camera.main;
