@@ -46,4 +46,5 @@ MonoBehaviour:
   _servicePrefabs:
   - {fileID: 65474028167370315, guid: 29eed676b9b2dd14ab33c47e84563b08, type: 3}
   - {fileID: 502585141091988773, guid: 6d726039b3c327f48845cf455aee6d87, type: 3}
-  _serviceScriptableObjects: []
+  _serviceScriptableObjects:
+  - {fileID: 11400000, guid: 68dc0868e38b64b4680291dbb4919c9f, type: 2}

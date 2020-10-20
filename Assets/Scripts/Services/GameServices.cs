@@ -47,6 +47,8 @@ namespace Game.Services
                 Debug.LogError($"{key} already registred!");
                 return;
             }
+            
+            Debug.Log($"Service <{key}> registred!");
 
             _servicesDict.Add(key, service);
         }
@@ -106,7 +108,7 @@ namespace Game.Services
             {
                 if (soService != null)
                 {
-                    RegisterService(soService);
+                    RegisterService(soService, soService.GetType());
                 }
             }
         }
