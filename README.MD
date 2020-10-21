@@ -19,3 +19,19 @@ Drag left mouse button to select units.
 Click right mouse button to give order.
 
 #### Screenshots:
+
+![screen_0](Screens\attack_settings_0.jpg)
+
+
+![screen_0](Screens\attack_settings_1.jpg)
+
+![screen_0](Screens\battle_0.jpg)
+
+![screen_0](Screens\battle_1.jpg)
+
+![screen_0](Screens\SampleUnits_0.jpg)
+
+![screen_0](Screens\SampleUnits_1.jpg)
+
+
+![screen_0](Screens\Selection_0.jpg)
