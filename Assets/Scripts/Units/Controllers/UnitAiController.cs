@@ -100,11 +100,13 @@ namespace Units.Controllers
 
         public void SetTarget(GameUnit target)
         {
+            _aiBehaviorType = AiBehaviorType.MOVE_TO_TARGET;
             _targetUnit = target;
         }
 
         public void SetTarget(Vector3 point)
         {
+            _aiBehaviorType = AiBehaviorType.MOVE_TO_TARGET;
             _pointTarget = point;
         }
 

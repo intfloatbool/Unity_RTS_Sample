@@ -6,7 +6,7 @@ namespace Units.Controllers
     public abstract class UnitControllerBase : MonoBehaviour
     {
         [SerializeField] protected GameUnit _gameUnit;
-        
+        public GameUnit GameUnit => _gameUnit;
         public virtual void SetUnit(GameUnit gameUnit)
         {
             _gameUnit = gameUnit;

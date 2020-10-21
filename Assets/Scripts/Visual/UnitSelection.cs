@@ -50,10 +50,6 @@ namespace Game
                     _spriteRend.color = _colorSettings.GetColorByOwner(CurrentOwner);
                 }
             }
-            else
-            {
-                
-            }
         }
     } 
 }
